@@ -9,9 +9,11 @@ class SCCIPath:
     root = '/data/blank54/workspace/project/scci/'
 
     fdir_data = os.path.join(root, 'data/')
+    fdir_corpus = os.path.join(root, 'corpus/')
 
     fdir_query = os.path.join(fdir_data, 'naver_news/query/')
     fdir_url_list = os.path.join(fdir_data, 'naver_news/url_list/')
+    fdir_article = os.path.join(fdir_corpus, 'naver_news/')
 
 
 def makedir(fpath):
@@ -28,3 +30,10 @@ def makedir(fpath):
         os.makedirs(fpath, exist_ok=True)
     else:
         os.makedirs('/'.join(fpath.split('/')[:-1]), exist_ok=True)
+
+
+def fname2query(fname):
+    Q, D = fname.replace('.pk', '').split('_')
+    query_list = Q.split('-')[1].split('+')
+    date = D.split('-')[1]
+    return query_list, date

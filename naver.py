@@ -22,8 +22,6 @@ from urllib.parse import quote
 from bs4 import BeautifulSoup
 
 
-
-
 class Status:
     def url_list_cnt(self):
         url_list = []
@@ -42,11 +40,16 @@ class Status:
 class Article:
     def __init__(self, **kwargs):
         self.url = kwargs.get('url', '')
+        self.id = kwargs.get('id', '')
+        self.query = []
 
         self.title = kwargs.get('title', '')
         self.date = kwargs.get('date', '')
         self.category = kwargs.get('category', '')
         self.content = kwargs.get('content', '')
+
+    def extend_query(self, query_list):
+        self.query.extend(query_list)
 
 
 class QueryParser:
@@ -110,7 +113,7 @@ class NewsCrawler:
 
 
 class ListScraper(NewsCrawler):
-    def __init__(self, **kwargs):
+    def __init__(self):
         self.url_base = 'https://search.naver.com/search.naver?where=news&sm=tab_pge&query={}&sort=1&photo=0&field=0&pd=3&ds={}&de={}&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:dd,p:from{}to{},a:all&start={}'
 
     def get_url_list(self, query, date):
@@ -135,3 +138,27 @@ class ListScraper(NewsCrawler):
                 continue
 
         return list(set(url_list))
+
+
+class ArticleParser(NewsCrawler):
+    def __init__(self):
+        pass
+
+    def parse(self, url):
+        req = request.Request(url=url, headers=self.headers)
+        html = request.urlopen(req).read()
+        soup = BeautifulSoup(html, 'lxml')
+        time.sleep(self.time_lag)
+
+        id = str(url.split('=')[-1])
+        title = soup.find_all('h3', {'id': 'articleTitle'})[0].get_text().strip()
+        date = soup.find_all('span', {'class': 't11'})[0].get_text().split()[0].replace('.', '').strip()
+        content = soup.find_all('div', {'id': 'articleBodyContents'})[0].get_text().strip()
+
+        try:
+            category = soup.find_all('em', {'class': 'guide_categorization_item'})[0].get_text().strip()
+        except IndexError:
+            category = None
+
+        article = Article(url=url, id=id, title=title, date=date, category=category, content=content)
+        return article

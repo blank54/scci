@@ -10,8 +10,9 @@ from tqdm import tqdm
 import sys
 sys.path.append('/data/blank54/workspace/project/scci/')
 from util import *
-from naver import QueryParser, ListScraper, Status
 scci_path = SCCIPath()
+
+from naver import QueryParser, ListScraper, Status
 query_parser = QueryParser()
 list_scraper = ListScraper()
 status = Status()
@@ -30,7 +31,7 @@ def parse_query():
     return date_list, query_list
 
 def save_url_list(query, date, url_list):
-    fname_url_list = 'K-{}_D-{}.pk'.format(query, date)
+    fname_url_list = 'Q-{}_D-{}.pk'.format(query, date)
     fpath_url_list = os.path.join(scci_path.fdir_url_list, fname_url_list)
     makedir(fpath=fpath_url_list)
     with open(fpath_url_list, 'wb') as f:
