@@ -28,23 +28,51 @@ def save_article(article):
     with open(fpath_article, 'wb') as f:
         pk.dump(article, f)
 
+def check_exist(url):
+    id = url.split('=')[-1]
+    fname_article = 'a-{}.pk'.format(id)
+    fpath_article = os.path.join(scci_path.fdir_article, fname_article)
+    return os.path.isfile(fpath_article)
 
 def parse_article():
+    print('Parse articles:')
+
+    cnt = 0
+    duplicates = []
+    errors = []
     with tqdm(total=len(os.listdir(scci_path.fdir_url_list))) as pbar:
         for fname_url_list in os.listdir(scci_path.fdir_url_list):
             query_list, _ = fname2query(fname_url_list)
 
             url_list = read_url_list(fname=fname_url_list)
             for url in url_list:
-                article = article_parser.parse(url=url)
-                article.extend_query(query_list)
-                save_article(article)
+                pbar.update(1)
+                cnt += len(url_list)
 
-            pbar.update(1)
+                if check_exist(url):
+                    duplicates.append(url)
+                    continue
+                else:
+                    try:
+                        article = article_parser.parse(url=url)
+                        article.extend_query(query_list)
+                        save_article(article)
+                    except:
+                        errors.append(url)
+
+    print('========================================')
+    print('  |Initial   : {:,} urls'.format(cnt))
+    print('  |Done      : {:,} articles'.format(len(os.listdir(scci_path.fdir_article))))
+    print('  |Duplicated: {:,}'.format(len(duplicates)))
+    print('  |Error     : {:,}'.format(len(errors)))
+    print('========================================')
+
+    if errors:
+        print('Errors:')
+        for url in errors:
+            print(url)
+        print('========================================')
 
 
 if __name__ == '__main__':
-    print('Parse articles:')
     parse_article()
-    print('Done: {:,} articles in the corpus'.format(len(os.listdir(scci_path.fdir_article))))
-    print('------------------------------------------------------------')

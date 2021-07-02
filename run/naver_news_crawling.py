@@ -55,6 +55,6 @@ def scrape_url_list():
 
 
 if __name__ == '__main__':
-    fname_query_list = 'query_20210630.txt'
+    fname_query_list = 'query_20210701.txt'
     scrape_url_list()
     status.url_list_cnt()
