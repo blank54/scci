@@ -11,6 +11,7 @@ class SCCIPath:
     fdir_data = os.path.join(root, 'data/')
     fdir_corpus = os.path.join(root, 'corpus/')
     fdir_model = os.path.join(root, 'model/')
+    fdir_result = os.path.join(root, 'result/')
 
     fdir_query = os.path.join(fdir_data, 'naver_news/query/')
     fdir_url_list = os.path.join(fdir_data, 'naver_news/url_list/')
@@ -18,6 +19,8 @@ class SCCIPath:
 
     fdir_tokenizer = os.path.join(fdir_model, 'tokenizer/')
     fdir_stoplist = os.path.join(fdir_model, 'stoplist/')
+
+    fdir_wordcloud = os.path.join(fdir_result, 'wordcloud/')
 
 
 def makedir(fpath):
