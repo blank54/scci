@@ -49,7 +49,9 @@ class Article:
         self.content = kwargs.get('content', '')
 
     def extend_query(self, query_list):
-        self.query.extend(query_list)
+        queries = self.query
+        queries.extend(query_list)
+        self.query = list(set(queries))
 
 
 class QueryParser:

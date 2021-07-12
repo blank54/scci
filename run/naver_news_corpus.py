@@ -25,6 +25,11 @@ def read_url_list(fname):
         url_list = pk.load(f)
     return url_list
 
+def load_article(fpath_article):
+    with open(fpath_article, 'rb') as f:
+        article = pk.load(f)
+    return article
+
 def save_article(article):
     fname_article = 'a-{}.pk'.format(article.id)
     fpath_article = os.path.join(scci_path.fdir_article, fname_article)
@@ -32,11 +37,11 @@ def save_article(article):
     with open(fpath_article, 'wb') as f:
         pk.dump(article, f)
 
-def check_exist(url):
+def url2fpath(url):
     id = url.split('=')[-1]
     fname_article = 'a-{}.pk'.format(id)
     fpath_article = os.path.join(scci_path.fdir_article, fname_article)
-    return os.path.isfile(fpath_article)
+    return fpath_article
 
 def parse_article():
     print('Parse articles:')
@@ -52,15 +57,18 @@ def parse_article():
                 pbar.update(1)
                 cnt += len(url_list)
 
-                if check_exist(url):
-                    continue
+                fpath_article = url2fpath(url)
+                if os.path.isfile(fpath_article):
+                    article = load_article(fpath_article)
                 else:
                     try:
                         article = article_parser.parse(url=url)
-                        article.extend_query(query_list)
-                        save_article(article)
                     except:
                         errors.append(url)
+                        continue
+
+                article.extend_query(query_list)
+                save_article(article)
 
     print('========================================')
     print('  |Initial   : {:,} urls'.format(cnt))
