@@ -3,12 +3,15 @@
 
 # Configuration
 import os
+import sys
+file_path = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.sep.join(file_path.split(os.path.sep)[:-1])
+sys.path.append(config_path)
+
 import itertools
 import pickle as pk
 from tqdm import tqdm
 
-import sys
-sys.path.append('/data/blank54/workspace/project/scci/')
 from util import *
 scci_path = SCCIPath()
 
