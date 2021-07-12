@@ -48,6 +48,8 @@ class Article:
         self.category = kwargs.get('category', '')
         self.content = kwargs.get('content', '')
 
+        self.content_normalized = kwargs.get('content_normalized', '')
+
     def extend_query(self, query_list):
         queries = self.query
         queries.extend(query_list)
