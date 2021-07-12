@@ -70,13 +70,13 @@ def export_wordcloud(docs, fname):
     plt.axis('off')
 
     makedir(fpath)
-    plt.savefig(fpath, dpi=300)
+    plt.savefig(fpath, dpi=300, bbox_inches='tight', pad_inches=0)
 
 
 if __name__ == '__main__':
     fname_tokenizer = 'tokenizer_20210712.pk'
     fname_stoplist = 'stoplist_20210712.txt'
-    corporations = ['현대건설', '포스코건설', '대우건설', '대림건설', '현대엔지니어링']
+    corporations = ['현대건설', '포스코건설', '대우건설', '대림건설', '현대엔지니어링', '삼성물산']
     
     print('========================================')
     print('WordCloud for top corporations')
