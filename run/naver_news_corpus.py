@@ -5,6 +5,7 @@
 import os
 import pickle as pk
 from tqdm import tqdm
+from collections import defaultdict
 
 import sys
 sys.path.append('/data/blank54/workspace/project/scci/')
@@ -38,7 +39,6 @@ def parse_article():
     print('Parse articles:')
 
     cnt = 0
-    duplicates = []
     errors = []
     with tqdm(total=len(os.listdir(scci_path.fdir_url_list))) as pbar:
         for fname_url_list in os.listdir(scci_path.fdir_url_list):
@@ -50,7 +50,6 @@ def parse_article():
                 cnt += len(url_list)
 
                 if check_exist(url):
-                    duplicates.append(url)
                     continue
                 else:
                     try:
@@ -63,7 +62,6 @@ def parse_article():
     print('========================================')
     print('  |Initial   : {:,} urls'.format(cnt))
     print('  |Done      : {:,} articles'.format(len(os.listdir(scci_path.fdir_article))))
-    print('  |Duplicated: {:,}'.format(len(duplicates)))
     print('  |Error     : {:,}'.format(len(errors)))
     print('========================================')
 

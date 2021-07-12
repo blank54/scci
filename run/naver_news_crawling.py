@@ -18,16 +18,10 @@ list_scraper = ListScraper()
 status = Status()
 
 
-def parse_query():
-    global fname_query_list
-
-    fpath_query = os.path.join(scci_path.fdir_query, fname_query_list)
-    with open(fpath_query, 'r', encoding='utf-8') as f:
-        items = f.read().split('\n\n')
-
-    date_start, date_end = items[0].split('\n')
+def parse_query(query_file):
+    date_start, date_end = query_file[0].split('\n')
     date_list = query_parser.build_date_list(date_start, date_end)
-    query_list = query_parser.build_query_list(items[1:])
+    query_list = query_parser.build_query_list(query_file[1:])
     return date_list, query_list
 
 def save_url_list(query, date, url_list):
@@ -37,8 +31,12 @@ def save_url_list(query, date, url_list):
     with open(fpath_url_list, 'wb') as f:
         pk.dump(url_list, f)
 
-def scrape_url_list():
-    date_list, query_list = parse_query()
+def scrape_url_list(fname_query_list):
+    fpath_query = os.path.join(scci_path.fdir_query, fname_query_list)
+    with open(fpath_query, 'r', encoding='utf-8') as f:
+        query_file = f.read().split('\n\n')
+        date_list, query_list = parse_query(query_file)
+    
     for date in sorted(date_list, reverse=False):
         cnt = 0
 
@@ -56,5 +54,5 @@ def scrape_url_list():
 
 if __name__ == '__main__':
     fname_query_list = 'query_20210701.txt'
-    scrape_url_list()
+    scrape_url_list(fname_query_list)
     status.url_list_cnt()
