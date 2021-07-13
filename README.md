@@ -50,4 +50,4 @@ To collect naver news that are relevant to the corporations.
 
 | Date Start | Date End | Qeury |
 |:---:|:---:|:---:|
-| 2019.01.01. | 2020.12.31. | 스마트건설 |
+| 2019.01.01. | 2021.06.30. | 스마트건설 |
