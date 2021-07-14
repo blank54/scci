@@ -15,6 +15,7 @@ import time
 import itertools
 import numpy as np
 import pickle as pk
+from collections import defaultdict
 from datetime import datetime, timedelta
 
 from urllib import request
@@ -73,6 +74,24 @@ class QueryParser:
             day = date_start + timedelta(days=i)
             date_list.append(datetime.strftime(day, '%Y%m%d'))
         return date_list
+
+    def load_corporation_names(self, fname):
+        fpath_corporation_names = os.path.join(scci_path.fdir_query, fname)
+        with open(fpath_corporation_names, 'r', encoding='utf-8') as f:
+            data = f.read().strip()
+
+        same_corp = {}
+        for line in data.split('\n'):
+            try:
+                original, synonyms = line.split('  ')
+                for synonym in synonyms.split(' '):
+                    same_corp[synonym] = original
+            except ValueError:
+                original = line.strip()
+
+            same_corp[original] = original
+
+        return same_corp
 
 
 class NewsQuery:
