@@ -15,6 +15,9 @@ tmp/
 *.ipynb
 .ipynb_checkpoints/
 
+# Unnecessary folders
+keras-contrib
+
 # Data
 *.xlsx
 *.pdf
