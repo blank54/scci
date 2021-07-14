@@ -60,10 +60,12 @@ def tokenize_target_docs(fname_tokenizer, fname_stoplist, corp):
     return stopword_removed
 
 def export_wordcloud(docs, fname):
+    stoplist_apartment = load_stoplist(fname='stoplist_apartment.txt')
+
     fpath = os.path.join(scci_path.fdir_wordcloud, fname)
 
     data = ' '.join(itertools.chain(*docs))
-    wc = WordCloud(width=400, height=300, background_color='white', font_path='/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf')
+    wc = WordCloud(width=400, height=300, background_color='white', font_path='/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf', stopwords=stoplist_apartment)
     wc.generate(data)
 
     plt.imshow(wc, interpolation='bilinear')
@@ -75,13 +77,13 @@ def export_wordcloud(docs, fname):
 
 if __name__ == '__main__':
     fname_tokenizer = 'tokenizer_20210712.pk'
-    fname_stoplist = 'stoplist_20210712.txt'
+    fname_stoplist = 'stoplist_20210714.txt'
     corporations = ['현대건설', '포스코건설', '대우건설', '대림건설', '현대엔지니어링', '삼성물산']
     
     print('========================================')
     print('WordCloud for top corporations')
     for corp in corporations:
-        fname_wordcloud = '20210712_{}.png'.format(corp)
+        fname_wordcloud = '20210714_{}.png'.format(corp)
         docs = tokenize_target_docs(fname_tokenizer=fname_tokenizer, fname_stoplist=fname_stoplist, corp=corp)
         export_wordcloud(docs=docs, fname=fname_wordcloud)
         print('  | {} -> {}'.format(corp, fname_wordcloud))
