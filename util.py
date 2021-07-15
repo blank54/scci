@@ -18,6 +18,7 @@ class SCCIPath:
     fdir_article = os.path.join(fdir_corpus, 'naver_news/')
 
     fdir_tokenizer = os.path.join(fdir_model, 'tokenizer/')
+    fdir_tokenized = os.path.join(fdir_corpus, 'tokenized/')
     fdir_stoplist = os.path.join(fdir_model, 'stoplist/')
 
     fdir_lda = os.path.join(fdir_model, 'lda/')
