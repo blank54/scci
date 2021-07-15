@@ -89,7 +89,7 @@ if __name__ == '__main__':
     
     ## Train tokenizer
     fname_tokenizer = 'tokenizer_20210712.pk'
-    # train_tokenizer(docs=docs, fname=fname_tokenizer)
+    train_tokenizer(docs=docs, fname=fname_tokenizer)
 
     ## Update stopword list
     fname_stoplist = 'stoplist_20210712.txt'

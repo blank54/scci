@@ -20,6 +20,8 @@ class SCCIPath:
     fdir_tokenizer = os.path.join(fdir_model, 'tokenizer/')
     fdir_stoplist = os.path.join(fdir_model, 'stoplist/')
 
+    fdir_lda = os.path.join(fdir_model, 'lda/')
+
     fdir_wordcloud = os.path.join(fdir_result, 'wordcloud/')
 
 
