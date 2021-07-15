@@ -42,7 +42,7 @@ def view_mentions():
     mentions = count_mentions(flist)
 
     print('========================================')
-    for idx, (key, value) in enumerate(sorted(mentions.items(), key=lambda x:x[1], reverse=True)[1:]):
+    for idx, (key, value) in enumerate(sorted(mentions.items(), key=lambda x:x[1], reverse=True)):
         print('  | [{:2,}] {}: {:,} ({:.02f}%)'.format((idx+1), key, value, (value/len(flist)*100)))
     print('Total: {:,} articles'.format(len(flist)))
     print('========================================')

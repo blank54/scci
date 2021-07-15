@@ -10,6 +10,7 @@ sys.path.append(config_path)
 
 import itertools
 import pickle as pk
+from tqdm import tqdm
 from collections import Counter
 
 from util import *
@@ -17,6 +18,7 @@ scci_path = SCCIPath()
 
 from connlp.preprocess import Normalizer, KoreanTokenizer
 normalizer = Normalizer()
+tokenizer = KoreanTokenizer(pre_trained=True, analyzer='Hannanum')
 
 
 def data_import():
@@ -28,25 +30,15 @@ def data_import():
             docs.append(pk.load(f))
     return docs
 
-def normalize_docs(docs):
-    return [normalizer.normalize(a.content) for a in docs]
+def tokenize_docs(docs):
+    normalized = [normalizer.normalize(a.content) for a in docs]
 
-def train_tokenizer(docs, fname):
-    normalized = normalize_docs(docs)
-
-    tokenizer = KoreanTokenizer(min_frequency=0)
-    tokenizer.train(text=normalized)
-
-    fpath = os.path.join(scci_path.fdir_tokenizer, fname)
-    makedir(fpath=fpath)
-    with open(fpath, 'wb') as f:
-        pk.dump(tokenizer, f)
-
-def load_tokenizer(fname):
-    fpath = os.path.join(scci_path.fdir_tokenizer, fname)
-    with open(fpath, 'rb') as f:
-        tokenizer = pk.load(f)
-    return tokenizer
+    tokenized = []
+    with tqdm(total=len(normalized)) as pbar:
+        for doc in normalized:
+            tokenized.append(tokenizer.extract_noun(doc))
+            pbar.update(1)
+    return tokenized
 
 def load_stoplist(fname):
     fpath = os.path.join(scci_path.fdir_stoplist, fname)
@@ -58,14 +50,27 @@ def load_stoplist(fname):
 
     return stoplist
 
-def count_words(docs, fname_tokenizer, fname_stoplist):
-    normalized = normalize_docs(docs)
+def count_words(docs, fname_tokenized, do_tokenize, fname_stoplist):
+    print('========================================')
+    print('Tokenize articles')
+    fpath_tokenized = os.path.join(scci_path.fdir_tokenized, fname_tokenized)
+    if do_tokenize:
+        tokenized = tokenize_docs(docs)
+        makedir(fpath_tokenized)
+        with open(fpath_tokenized, 'wb') as f:
+            pk.dump(tokenized, f)
+    else:
+        with open(fpath_tokenized, 'rb') as f:
+            tokenized = pk.dump(f)
 
-    tokenizer = load_tokenizer(fname=fname_tokenizer)
-    tokenized = [tokenizer.tokenize(doc) for doc in normalized]
-
+    print('========================================')
+    print('Stopword removal')
     stoplist = load_stoplist(fname_stoplist)
-    stopword_removed = [[w.strip() for w in doc if w not in stoplist] for doc in tokenized]
+    stopword_removed = []
+    with tqdm(total=len(tokenized)) as pbar:
+        for doc in tokenized:
+            stopword_removed.append([w.strip() for w in doc if w not in stoplist])
+            pbar.update(1)
 
     counter_before = Counter(itertools.chain(*tokenized))
     counter_after = Counter(itertools.chain(*stopword_removed))
@@ -87,13 +92,11 @@ if __name__ == '__main__':
     ## Data import
     docs = data_import()
     
-    ## Train tokenizer
-    fname_tokenizer = 'tokenizer_20210712.pk'
-    train_tokenizer(docs=docs, fname=fname_tokenizer)
-
     ## Update stopword list
-    fname_stoplist = 'stoplist_20210712.txt'
-    counter_before, counter_after = count_words(docs=docs, fname_tokenizer=fname_tokenizer, fname_stoplist=fname_stoplist)
+    fname_tokenized = 'tokenized_corpus_20210715.pk'
+    fname_stoplist = 'stoplist_20210715.txt'
+    do_tokenize = True
+    counter_before, counter_after = count_words(docs=docs, fname_tokenized=fname_tokenized, do_tokenize=do_tokenize, fname_stoplist=fname_stoplist)
 
     topn = 300
     update_stoplist(counter_before=counter_before, counter_after=counter_after, topn=topn)
