@@ -1,5 +1,5 @@
 # scci
-Smart Construction Sorporation Index
+Smart Construction Corporation Index
 
 ## _Project Information_
 - Supported by C!LAB (@Seoul Nat'l Univ.)
