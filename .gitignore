@@ -20,8 +20,6 @@ tmp/
 .ipynb_checkpoints/
 
 # Data
-*.csv
-*.xlsx
 *.json
 *.sql
 *.dill
