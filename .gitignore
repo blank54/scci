@@ -39,7 +39,6 @@ tmp/
 
 # Images
 *figure*
-*.png
 *.tif
 
 # Documents
