@@ -1,32 +1,51 @@
-# Python
+# Sourcecodes
 __pycache__/
 *.pyc
+*.py
 
 # PyPI
 dist/
 build/
 *.egg-info/
 *.manifest
+keras-contrib/
 
-# Experiments
+# Temporal
 tmp/
+*.tmp
+~*
 
 # Jupyter notebook
 *.ipynb
 .ipynb_checkpoints/
 
-# Unnecessary folders
-keras-contrib
-
 # Data
+*.csv
 *.xlsx
-*.pdf
-*.sql
 *.json
+*.sql
 *.dill
 *.pk
+*.h5
+*.bmp
+
+# Materials
+*.zip
+*.ppt
+*.pptx
 *.bin
 *.html
+*.mp4
+
+# Images
+*figure*
 *.png
-*.csv
-*.h5
+*.tif
+
+# Documents
+documents/
+*.hwp
+*.dot
+
+# Help
+*JW*
