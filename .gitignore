@@ -43,7 +43,6 @@ tmp/
 
 # Documents
 documents/
-*.hwp
 *.dot
 
 # Help
